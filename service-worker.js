@@ -1,7 +1,7 @@
 // Offline cache for Rondo. The registration in the page checks for updates
 // on every open; when this file changes, the new version activates and the
 // page reloads automatically. CACHE_VERSION is stamped automatically at build.
-const CACHE_VERSION = 'rondo-2026.06.19-060927';
+const CACHE_VERSION = 'rondo-2026.06.19-161629';
 const ASSETS = [
   './',
   './index.html',

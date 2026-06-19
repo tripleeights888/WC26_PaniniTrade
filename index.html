@@ -26,13 +26,14 @@
   h1 .logo{flex:0 0 auto;color:var(--chalk);}
   h1 .badge{font-size:0.58rem;font-weight:700;letter-spacing:0.08em;background:var(--gold);color:var(--ink);padding:3px 8px;border-radius:99px;text-transform:uppercase;}
   .sub{font-size:0.76rem;color:var(--chalk-dim);margin-top:3px;}
-  .toolbar{display:flex;align-items:flex-start;gap:6px;margin-top:11px;}
+  .toolbar{display:flex;align-items:flex-start;gap:6px;margin-top:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;}
+  .toolbar::-webkit-scrollbar{display:none;}
   .tbtn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:46px;padding:7px 6px 5px;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--chalk-dim);border:1px solid var(--line);cursor:pointer;transition:background .12s ease,color .12s ease;}
   .tbtn:active{transform:scale(0.95);}
   .tbtn .tlabel{font-size:0.56rem;font-weight:700;letter-spacing:0.02em;line-height:1;}
   .tbtn-accent{background:var(--gold);color:#1a1303;border-color:var(--gold);}
   .tbtn.on{background:var(--gold);color:#1a1303;border-color:var(--gold);}
-  .tbtn-reset{margin-left:auto;align-self:center;min-width:0;width:30px;height:30px;padding:0;border-radius:8px;color:#9a6b67;border-color:rgba(217,83,79,0.28);background:transparent;}
+  .tbtn-reset{margin-left:8px;align-self:center;min-width:0;width:30px;height:30px;padding:0;border-radius:8px;color:#9a6b67;border-color:rgba(217,83,79,0.28);background:transparent;flex:0 0 auto;}
   .tbtn-reset:active{background:rgba(217,83,79,0.16);}
   .tbar-div{flex:0 0 auto;width:1px;height:38px;background:var(--line);margin:0 3px;align-self:center;}
   .tbtn:active{opacity:0.85;}
@@ -109,19 +110,27 @@
   .cmp-chip.sel.on{background:var(--gold);color:#1a1303;border-color:var(--gold);}
   .cmp-chip.sel.on::before{opacity:1;background:#1a1303;border-color:#1a1303;}
   .cmp-chip.sel.on::after{content:'✓';position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:0.6rem;font-weight:900;color:var(--gold);}
-  .trade-bar{margin-top:12px;}
-  .trade-go{width:100%;}
-  .trade-review h3{font-size:1.05rem;margin:0 0 12px;color:var(--chalk);}
-  .tr-row{margin-bottom:12px;}
-  .tr-row b{display:block;font-size:0.8rem;color:var(--chalk-dim);margin-bottom:6px;}
+  .trade-bar{margin-top:14px;position:sticky;bottom:0;}
+  .trade-hint{text-align:center;font-size:0.78rem;color:var(--chalk-dim);padding:10px;font-style:italic;}
+  .trade-go{width:100%;font-size:0.95rem;font-weight:800;padding:14px;border-radius:11px;border:none;cursor:pointer;background:var(--gold);color:var(--ink);box-shadow:0 4px 14px rgba(213,176,72,0.35);display:flex;align-items:center;justify-content:center;gap:8px;animation:tradePulse 1.8s ease-in-out infinite;}
+  @keyframes tradePulse{0%,100%{box-shadow:0 4px 14px rgba(213,176,72,0.35);}50%{box-shadow:0 4px 22px rgba(213,176,72,0.6);}}
+  .trade-go:active{transform:scale(0.98);}
+  .trade-review{padding-top:4px;}
+  .trade-review h3{font-size:1.15rem;font-weight:800;margin:0 0 14px;color:var(--chalk);}
+  .tr-row{margin-bottom:14px;}
+  .tr-row b{display:block;font-size:0.78rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:7px;}
   .tr-chips{display:flex;flex-wrap:wrap;gap:6px;}
-  .tr-dups{background:rgba(213,176,72,0.1);border:1px solid var(--gold);border-radius:10px;padding:11px;margin:6px 0 14px;font-size:0.82rem;line-height:1.4;}
+  .tr-dups{background:rgba(213,176,72,0.1);border:1px solid var(--gold);border-radius:11px;padding:13px;margin:8px 0 16px;font-size:0.84rem;line-height:1.45;}
   .tr-dups b{color:var(--gold);}
-  .tr-dup{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px;}
-  .tr-toggle{display:flex;gap:12px;font-size:0.8rem;}
-  .tr-toggle label{display:flex;align-items:center;gap:4px;cursor:pointer;}
-  .tr-actions{display:flex;gap:8px;margin-top:6px;}
-  .tr-actions .b-primary{flex:1;}
+  .tr-dup{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px;padding-top:11px;border-top:1px solid rgba(213,176,72,0.25);}
+  .tr-dup>span:first-child{font-weight:800;color:var(--chalk);}
+  .tr-toggle{display:flex;gap:6px;}
+  .tr-toggle label{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:0.8rem;background:rgba(0,0,0,0.25);padding:5px 10px;border-radius:8px;border:1px solid var(--line);}
+  .tr-actions{display:flex;gap:8px;margin-top:8px;}
+  .tr-actions button{font-size:0.92rem;font-weight:800;padding:14px;border-radius:11px;border:none;cursor:pointer;}
+  .tr-actions .b-primary{flex:1;background:var(--gold);color:var(--ink);box-shadow:0 4px 14px rgba(213,176,72,0.35);}
+  .tr-actions .b-ghost{background:rgba(255,255,255,0.12);color:var(--chalk);}
+  .tr-actions button:active{transform:scale(0.98);}
   .scan-wrap{position:relative;width:min(320px,78vw);aspect-ratio:1;margin:4px auto 0;border-radius:14px;overflow:hidden;background:#000;}
   .scan-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
   .scan-frame{position:absolute;inset:14%;border:3px solid var(--gold);border-radius:14px;box-shadow:0 0 0 100vmax rgba(0,0,0,0.35);}
@@ -264,6 +273,10 @@
       <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5.5c-1.5-1-3.5-1.5-5-1.5-1 0-2 .2-3 .5v13c1-.3 2-.5 3-.5 1.5 0 3.5.5 5 1.5"/><path d="M13 5.5c1.5-1 3.5-1.5 5-1.5 1 0 2 .2 3 .5v13c-1-.3-2-.5-3-.5-1.5 0-3.5.5-5 1.5"/><path d="M12 6v13"/></svg>
       <span class="tlabel">Compare</span>
     </button>
+    <button class="tbtn tbtn-accent" onclick="showMyQR()" aria-label="My QR" title="Show my trade QR to share">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/><line x1="14" y1="19" x2="14" y2="21"/><line x1="19" y1="14" x2="21" y2="14"/></svg>
+      <span class="tlabel">My QR</span>
+    </button>
     <button class="tbtn tbtn-accent" onclick="startQRTrade()" aria-label="QR Trade" title="Scan a QR to trade">
       <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="14" y2="17"/><line x1="17" y1="14" x2="21" y2="14"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="14" y1="21" x2="17" y2="21"/></svg>
       <span class="tlabel">QR Trade</span>
@@ -273,13 +286,9 @@
       <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       <span class="tlabel">Select</span>
     </button>
-    <button class="tbtn" onclick="openModal('export')" aria-label="Export" title="Export / backup">
-      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      <span class="tlabel">Export</span>
-    </button>
-    <button class="tbtn" onclick="openModal('import')" aria-label="Import" title="Import">
-      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <span class="tlabel">Import</span>
+    <button class="tbtn" onclick="openModal('export')" aria-label="Backup" title="Backup, restore, and export lists">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="8 8 12 4 16 8"/><line x1="12" y1="4" x2="12" y2="11"/><polyline points="8 15 12 11 16 15" opacity="0.55"/></svg>
+      <span class="tlabel">Backup</span>
     </button>
     <button class="tbtn tbtn-reset" onclick="resetAll()" aria-label="Reset" title="Reset to defaults">
       <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
@@ -311,7 +320,7 @@
   <button class="bulk-cancel" onclick="exitSelectMode()">Done</button>
 </div>
 
-<footer>Tap a sticker for a verdict and action. Trade marks a dupe as traded; Got it moves a want into your collection. Export often so you do not lose changes.<br><br><span class="disclaimer">Rondo is an unofficial fan-made tracker. Not affiliated with or endorsed by Panini or FIFA. All trademarks belong to their respective owners.</span><br><span class="version">rondo-2026.06.19-060927</span></footer>
+<footer>Tap a sticker for a verdict and action. Trade marks a dupe as traded; Got it moves a want into your collection. Export often so you do not lose changes.<br><br><span class="disclaimer">Rondo is an unofficial fan-made tracker. Not affiliated with or endorsed by Panini or FIFA. All trademarks belong to their respective owners.</span><br><span class="version">rondo-2026.06.19-161629</span></footer>
 
 <div class="modal" id="modal">
   <div class="modal-card">
@@ -987,11 +996,12 @@ function openModal(mode){
   ta.style.display='block';
   d.style.display='';ac.style.display='';
   if(mode==='export'){
-    t.textContent='Export (full backup)';
-    d.textContent='This is the complete backup for restoring your app. Use Send to file to save it to Google Drive or Files. To post on a marketplace, use the Need or Give text exports instead.';
+    t.textContent='Backup & data';
+    d.textContent='Save a full backup, restore one, or get a text list to post. Your data lives on this device, so back up now and then.';
     ta.value=JSON.stringify(state);ta.readOnly=true;
     ac.innerHTML='<button class="b-primary" onclick="shareExport()">Send to file</button>'+
                  '<button class="b-ghost" onclick="copyExport()">Copy backup</button>'+
+                 '<button class="b-ghost" onclick="openModal(\'import\')">Import / restore</button>'+
                  '<button class="b-ghost" onclick="openModal(\'exportneed\')">Want list</button>'+
                  '<button class="b-ghost" onclick="openModal(\'exportgive\')">Trade list</button>'+
                  '<button class="b-ghost" onclick="closeModal()">Close</button>';
@@ -1013,17 +1023,17 @@ function openModal(mode){
                  '<button class="b-ghost" onclick="openModal(\'export\')">Back</button>'+
                  '<button class="b-ghost" onclick="closeModal()">Close</button>';
   }else if(mode==='qrcode'){
-    t.textContent='Trade list QR';
-    d.textContent='Have another Rondo user scan this with their phone camera. The text opens, they copy it, then paste into Compare to see what you can trade.';
+    t.textContent='My trade QR';
+    d.textContent='Have another Rondo user tap QR Trade and scan this. It loads your spares so they can pick what they want. No internet needed.';
     ta.value='';ta.style.display='none';
     renderTradeQR();
-    ac.innerHTML='<button class="b-ghost" onclick="openModal(\'exportgive\')">Back</button>'+
-                 '<button class="b-ghost" onclick="closeModal()">Close</button>';
+    ac.innerHTML='<button class="b-ghost" onclick="closeModal()">Done</button>';
   }else if(mode==='import'){
-    t.textContent='Import lists';
-    d.textContent='Paste exported text here and tap Load. This replaces your current lists on this device.';
+    t.textContent='Import / restore';
+    d.textContent='Paste a backup or list here and tap Load. This replaces your current data on this device.';
     ta.value='';ta.readOnly=false;
     ac.innerHTML='<button class="b-primary" onclick="doImport()">Load</button>'+
+                 '<button class="b-ghost" onclick="openModal(\'export\')">Back</button>'+
                  '<button class="b-ghost" onclick="closeModal()">Cancel</button>';
   }else if(mode==='quickadd'){
     t.textContent='Quick add a pile';
@@ -1238,6 +1248,7 @@ function parseList(text){
 }
 var tradeCtx={theirs:null,receive:{},give:{}}; // current trade working set
 var scanStream=null,scanRAF=null;
+function showMyQR(){ openModal('qrcode'); }
 function startQRTrade(){
   // open the scanner modal UI
   var m=document.getElementById('modal');
@@ -1306,6 +1317,16 @@ function runCompare(){
   var text=document.getElementById('modal-text').value;
   runCompareFromText(text);
 }
+function resetCompare(){
+  // bring back the empty paste box for a new list
+  tradeCtx={theirs:null,receive:{},give:{}};
+  var ta=document.getElementById('modal-text');if(ta){ta.style.display='block';ta.value='';ta.readOnly=false;}
+  var d=document.getElementById('modal-desc');if(d)d.textContent='Paste their list (their wants, or their full trade text), then tap Compare.';
+  var box=document.getElementById('cmp-results');if(box)box.innerHTML='';
+  var ac=document.getElementById('modal-actions');
+  if(ac)ac.innerHTML='<button class="b-primary" onclick="runCompare()">Compare</button>'+
+                     '<button class="b-ghost" onclick="closeModal()">Close</button>';
+}
 function runCompareFromText(text){
   var theirs=parseList(text);
   var box=document.getElementById('cmp-results');
@@ -1313,6 +1334,13 @@ function runCompareFromText(text){
   if(!Object.keys(theirs).length){
     box.innerHTML='<div class="cmp-empty">Could not find any stickers in that text. Try lines like "EGY 17" or "MEX 6, 8".</div>';return;
   }
+  // Comparison succeeded: collapse the paste textarea and swap the bottom
+  // buttons so the trade flow is the only call to action (no competing buttons).
+  var ta=document.getElementById('modal-text');if(ta)ta.style.display='none';
+  var d=document.getElementById('modal-desc');if(d)d.textContent='Tap the stickers you are taking, then review the trade.';
+  var ac=document.getElementById('modal-actions');
+  if(ac)ac.innerHTML='<button class="b-ghost" onclick="resetCompare()">New list</button>'+
+                     '<button class="b-ghost" onclick="closeModal()">Close</button>';
   tradeCtx={theirs:theirs,receive:{},give:{}};
   var theyTradeIWant=[];   // their list ∩ my wants  (they give, I receive)
   var iCoverTheirList=[];  // their list ∩ my spares (if their list were wants, I could give)
@@ -1365,8 +1393,9 @@ function toggleTrade(role,key,el){
 function updateTradeBar(){
   var bar=document.getElementById('trade-bar');if(!bar)return;
   var r=Object.keys(tradeCtx.receive).length,g=Object.keys(tradeCtx.give).length;
-  if(!r&&!g){bar.innerHTML='';return;}
-  bar.innerHTML='<button class="b-primary trade-go" onclick="reviewTrade()">Review trade ('+r+' in'+(g?(' / '+g+' out'):'')+')</button>';
+  if(!r&&!g){bar.innerHTML='<div class="trade-hint">Tap stickers above to build a trade</div>';return;}
+  var parts=[];if(r)parts.push(r+' in');if(g)parts.push(g+' out');
+  bar.innerHTML='<button class="trade-go" onclick="reviewTrade()">Review trade ('+parts.join(' / ')+') &nbsp;→</button>';
 }
 function keyLabel(key){var p=key.split('|');return (p[0]==='CC')?p[1]:(p[0]+' '+p[1]);}
 function reviewTrade(){
@@ -1376,7 +1405,7 @@ function reviewTrade(){
   var dupQs=recv.filter(function(key){var p=key.split('|');var c=p[0],v=(c==='CC')?p[1]:parseInt(p[1],10);
     return state.have[c]&&inList(state.have[c],v);});
   var cu=document.getElementById('modal-custom');
-  var html='<div class="trade-review"><h3>Confirm trade</h3>';
+  var html='<div class="trade-review">';
   html+='<div class="tr-row"><b>You receive ('+recv.length+')</b><div class="tr-chips">'+
     (recv.length?recv.map(function(k){return '<span class="cmp-chip want">'+keyLabel(k)+'</span>';}).join(''):'<span class="cmp-empty">Nothing</span>')+'</div></div>';
   if(give.length)html+='<div class="tr-row"><b>You give ('+give.length+')</b><div class="tr-chips">'+
@@ -1390,16 +1419,18 @@ function reviewTrade(){
     });
     html+='</div>';
   }
-  html+='<div class="tr-actions"><button class="b-primary" onclick="commitTrade()">Confirm trade</button>'+
+  html+='<div class="tr-actions"><button class="b-primary" onclick="commitTrade()">Confirm &amp; apply</button>'+
         '<button class="b-ghost" onclick="cancelReview()">Back</button></div></div>';
   cu.innerHTML=html;
+  var tt=document.getElementById('modal-title');if(tt)tt.textContent='Confirm trade';
   // hide the textarea, description, and bottom action row while reviewing
   var ta=document.getElementById('modal-text');if(ta)ta.style.display='none';
   var dd=document.getElementById('modal-desc');if(dd)dd.style.display='none';
   var aa=document.getElementById('modal-actions');if(aa)aa.style.display='none';
 }
 function cancelReview(){
-  // restore the description and action row, re-render the compare results
+  // restore the title, description and action row, re-render the compare results
+  var tt=document.getElementById('modal-title');if(tt)tt.textContent='Compare with a friend';
   var dd=document.getElementById('modal-desc');if(dd)dd.style.display='';
   var aa=document.getElementById('modal-actions');if(aa)aa.style.display='';
   var cu=document.getElementById('modal-custom');

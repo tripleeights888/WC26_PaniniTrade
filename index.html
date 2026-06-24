@@ -188,6 +188,9 @@
   .qa-cell-minus{position:absolute;bottom:1px;right:5px;font-size:1rem;font-weight:900;color:var(--chalk-dim);line-height:1;cursor:pointer;padding:2px 4px;}
   .qa-cell-minus:active{color:#e88;}
   .qa-cell-picker{grid-column:1/-1;background:rgba(0,0,0,0.4);border:1px solid var(--line);border-radius:11px;padding:11px;margin:2px 0;}
+  .qa-picker-head{font-size:0.78rem;font-weight:900;color:var(--chalk);margin-bottom:9px;}
+  .qa-copy-row{margin-bottom:10px;}
+  .qa-copy-row:last-child{margin-bottom:0;}
   .qa-picker-label{font-size:0.72rem;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:8px;}
   .qa-swatches{display:flex;flex-wrap:wrap;gap:8px;}
   .qa-swatch{width:32px;height:32px;border-radius:8px;border:2px solid rgba(255,255,255,0.25);cursor:pointer;padding:0;position:relative;}
@@ -441,7 +444,7 @@
   <button class="bulk-cancel" onclick="exitSelectMode()">Done</button>
 </div>
 
-<footer>Tap a sticker for a verdict and action. Trade marks a dupe as traded; Got it moves a want into your collection. Export often so you do not lose changes.<br><br><span class="disclaimer">Rondo is an unofficial fan-made tracker. Not affiliated with or endorsed by Panini or FIFA. All trademarks belong to their respective owners.</span><br><span class="version">rondo-2026.06.24-020438</span></footer>
+<footer>Tap a sticker for a verdict and action. Trade marks a dupe as traded; Got it moves a want into your collection. Export often so you do not lose changes.<br><br><span class="disclaimer">Rondo is an unofficial fan-made tracker. Not affiliated with or endorsed by Panini or FIFA. All trademarks belong to their respective owners.</span><br><span class="version">rondo-2026.06.24-035414</span></footer>
 
 <div class="modal" id="modal">
   <div class="modal-card">
@@ -1711,11 +1714,11 @@ function qaTeamEcho(){
 }
 function qaCurrentCode(){var ti=document.getElementById('qa-team');return ti?(ti.value||'').trim().toUpperCase():'';}
 function qaTapChip(valStr){
-  // val may be a number or a CC string
+  // val may be a number or a CC string. Each copy carries its own colour.
   var val=(/^CC/.test(valStr))?valStr:parseInt(valStr,10);
   var key=String(val);
-  if(!qaPile[key])qaPile[key]={val:val,count:1,color:'white'};
-  else qaPile[key].count++;
+  if(!qaPile[key])qaPile[key]={val:val,colors:['white']};
+  else qaPile[key].colors.push('white');
   qaColorPick=null;
   renderQaGrid();renderQaCommit();
 }
@@ -1723,8 +1726,8 @@ function qaUntapChip(valStr,ev){
   if(ev&&ev.stopPropagation)ev.stopPropagation();
   var key=String((/^CC/.test(valStr))?valStr:parseInt(valStr,10));
   if(qaPile[key]){
-    qaPile[key].count--;
-    if(qaPile[key].count<=0){delete qaPile[key];if(qaColorPick===key)qaColorPick=null;}
+    qaPile[key].colors.pop();
+    if(qaPile[key].colors.length<=0){delete qaPile[key];if(qaColorPick===key)qaColorPick=null;}
   }
   renderQaGrid();renderQaCommit();
 }
@@ -1734,11 +1737,10 @@ function qaToggleColorPick(valStr,ev){
   qaColorPick=(qaColorPick===key)?null:key;
   renderQaGrid();
 }
-function qaPickColor(valStr,colorKey,ev){
+function qaPickColor(valStr,copyIdx,colorKey,ev){
   if(ev&&ev.stopPropagation)ev.stopPropagation();
   var key=String((/^CC/.test(valStr))?valStr:parseInt(valStr,10));
-  if(qaPile[key])qaPile[key].color=colorKey;
-  qaColorPick=null;
+  if(qaPile[key]&&qaPile[key].colors[copyIdx]!==undefined)qaPile[key].colors[copyIdx]=colorKey;
   renderQaGrid();
 }
 function renderQaGrid(){
@@ -1754,25 +1756,33 @@ function renderQaGrid(){
     var key=String(v);
     var inPile=qaPile[key];
     var label=(/^CC/.test(String(v)))?String(v).replace('CC',''):v;
-    var cls='qa-cell'+(inPile?' on':'');
-    var col=inPile?inPile.color:'white';
-    if(inPile&&col!=='white')cls+=' tinted';
-    var badge=(inPile&&inPile.count>1)?('<span class="qa-cell-x">×'+inPile.count+'</span>'):'';
-    var dot=inPile?('<span class="qa-cell-dot" style="background:'+(col!=='white'?COLORS[col].c:'transparent')+';border-color:'+(col!=='white'?COLORS[col].c:'rgba(255,255,255,0.35)')+'" onclick="qaToggleColorPick(\''+v+'\',event)"></span>'):'';
+    var colors=inPile?inPile.colors:[];
+    var count=colors.length;
+    var anySpecial=colors.some(function(c){return c!=='white';});
+    var cls='qa-cell'+(inPile?' on':'')+(anySpecial?' tinted':'');
+    var badge=(count>1)?('<span class="qa-cell-x">×'+count+'</span>'):'';
+    // show up to the first copy's colour as the dot; multi-colour piles show a small "multi" hint
+    var firstSpecial=colors.find(function(c){return c!=='white';});
+    var dotCol=firstSpecial||'white';
+    var dot=inPile?('<span class="qa-cell-dot" style="background:'+(dotCol!=='white'?COLORS[dotCol].c:'transparent')+';border-color:'+(dotCol!=='white'?COLORS[dotCol].c:'rgba(255,255,255,0.35)')+'" onclick="qaToggleColorPick(\''+v+'\',event)"></span>'):'';
     var minus=inPile?('<span class="qa-cell-minus" onclick="qaUntapChip(\''+v+'\',event)">–</span>'):'';
     html+='<div class="'+cls+'" onclick="qaTapChip(\''+v+'\')">'+
       '<span class="qa-cell-num">'+label+'</span>'+badge+dot+minus+'</div>';
-    // inline colour picker under the cell when open
-    if(qaColorPick===key){
-      var sw=COLOR_ORDER.map(function(k){
-        return '<button class="qa-swatch'+(col===k?' on':'')+'" title="'+COLORS[k].label+'" style="background:'+COLORS[k].c+'" onclick="qaPickColor(\''+v+'\',\''+k+'\',event)"></button>';
+    // inline colour picker: one row per copy so each can be coloured independently
+    if(qaColorPick===key&&inPile){
+      var rows=colors.map(function(curCol,ci){
+        var sw=COLOR_ORDER.map(function(k){
+          return '<button class="qa-swatch'+(curCol===k?' on':'')+'" title="'+COLORS[k].label+'" style="background:'+COLORS[k].c+'" onclick="qaPickColor(\''+v+'\','+ci+',\''+k+'\',event)"></button>';
+        }).join('');
+        var copyLabel=count>1?('Copy '+(ci+1)):'Colour';
+        return '<div class="qa-copy-row"><div class="qa-picker-label">'+copyLabel+'</div><div class="qa-swatches">'+sw+'</div></div>';
       }).join('');
-      html+='<div class="qa-cell-picker"><div class="qa-picker-label">Colour for '+label+'</div><div class="qa-swatches">'+sw+'</div></div>';
+      html+='<div class="qa-cell-picker"><div class="qa-picker-head">#'+label+(count>1?(' · '+count+' copies'):'')+'</div>'+rows+'</div>';
     }
   });
   grid.innerHTML=html;
 }
-function qaPileCount(){var n=0;for(var k in qaPile)n+=qaPile[k].count;return n;}
+function qaPileCount(){var n=0;for(var k in qaPile)n+=qaPile[k].colors.length;return n;}
 function renderQaCommit(){
   var commit=document.getElementById('qa-commit');if(!commit)return;
   var n=qaPileCount();
@@ -1805,9 +1815,9 @@ function quickAddBatch(){
   if(!NAMES[code] && ['INTRO','MUSEUM','CC','LOGO'].indexOf(code)===-1){
     fb.innerHTML=qaCard('bad','Unknown team code',code,'That is not a team in this album.');return;
   }
-  // expand qaPile into individual stickers (respecting count)
+  // expand qaPile into individual stickers (one token per copy, each with its colour)
   var tokens=[];
-  for(var k in qaPile){ for(var c=0;c<qaPile[k].count;c++){ tokens.push({val:qaPile[k].val,color:qaPile[k].color}); } }
+  for(var k in qaPile){ qaPile[k].colors.forEach(function(col){ tokens.push({val:qaPile[k].val,color:col}); }); }
   if(!tokens.length){fb.innerHTML=qaCard('bad','Nothing selected','','Tap the numbers from your pile first, then commit.');return;}
   var results={newList:[],dupeList:[],badList:[]};
   var coloredCount=0;

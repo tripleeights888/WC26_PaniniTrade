@@ -444,7 +444,7 @@
   <button class="bulk-cancel" onclick="exitSelectMode()">Done</button>
 </div>
 
-<footer>Tap a sticker for a verdict and action. Trade marks a dupe as traded; Got it moves a want into your collection. Export often so you do not lose changes.<br><br><span class="disclaimer">Rondo is an unofficial fan-made tracker. Not affiliated with or endorsed by Panini or FIFA. All trademarks belong to their respective owners.</span><br><span class="version">rondo-2026.06.30-181552</span></footer>
+<footer>Tap a sticker for a verdict and action. Trade marks a dupe as traded; Got it moves a want into your collection. Export often so you do not lose changes.<br><br><span class="disclaimer">Rondo is an unofficial fan-made tracker. Not affiliated with or endorsed by Panini or FIFA. All trademarks belong to their respective owners.</span><br><span class="version">rondo-2026.06.30-182916</span></footer>
 
 <div class="modal" id="modal">
   <div class="modal-card">
@@ -1517,11 +1517,12 @@ function openModal(mode){
     t.textContent='Backup & data';
     d.textContent='Save a full backup, restore one, or get a text list to post. Your data lives on this device, so back up now and then.';
     ta.value=JSON.stringify(state);ta.readOnly=true;
-    ac.innerHTML='<button class="b-primary" onclick="shareExport()">Send to file</button>'+
+    ac.innerHTML='<button class="b-primary" onclick="copyBothLists()">Copy trade + want lists</button>'+
+                 '<button class="b-ghost" onclick="openModal(\'exportgive\')">Trade list only</button>'+
+                 '<button class="b-ghost" onclick="openModal(\'exportneed\')">Want list only</button>'+
+                 '<button class="b-ghost" onclick="shareExport()">Send to file</button>'+
                  '<button class="b-ghost" onclick="copyExport()">Copy backup</button>'+
                  '<button class="b-ghost" onclick="openModal(\'import\')">Import / restore</button>'+
-                 '<button class="b-ghost" onclick="openModal(\'exportneed\')">Want list</button>'+
-                 '<button class="b-ghost" onclick="openModal(\'exportgive\')">Trade list</button>'+
                  '<button class="b-ghost" onclick="closeModal()">Close</button>';
   }else if(mode==='exportneed'){
     t.textContent='My Want list (to post)';
@@ -2236,6 +2237,21 @@ function copyExport(){
     if(navigator.clipboard){navigator.clipboard.writeText(ta.value).then(function(){flash('Copied');});}
     else flash('Select and copy manually');
   }
+}
+// One-tap: combine the trade list and want list into a single postable block.
+function copyBothLists(){
+  var trade=buildTextList(state.dupes,'give');
+  var want=buildTextList(state.wants,'need');
+  var combined=trade+'\n\n'+want;
+  function done(){flash('Both lists copied');}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(combined).then(done).catch(function(){fallbackCopy(combined);});
+  }else{fallbackCopy(combined);}
+}
+function fallbackCopy(text){
+  var ta=document.getElementById('modal-text');
+  if(ta){ta.style.display='block';ta.readOnly=true;ta.value=text;ta.select();
+    try{document.execCommand('copy');flash('Both lists copied');}catch(e){flash('Select and copy manually');}}
 }
 // Build a clean, human-readable list for posting. kind 'need' or 'give'.
 function renderTradeQR(){
